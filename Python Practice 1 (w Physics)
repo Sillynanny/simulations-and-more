@@ -14,6 +14,7 @@ h=10
 dt=.01
 v_0y=0
 v_0x=0
+a_x=0
 a_y=-g
 N=150
 
@@ -28,19 +29,21 @@ for n in range(N):
     term_v_x=v_0x
     term_h_y=h+v_0y*dt*n+0.5*a_y*(dt*n)**2
     term_h_x=term_v_x*dt*n
-    if term_h_y>0:
-        h_y.append(term_h_y)
-    else:
+    if term_h_y<0:
         break
+    else:
+        h_y.append(term_h_y)
     if term_h_x>0:
         h_x.append(term_h_x)
     else:
         h_x.append(0)
     v_x.append(term_v_x)
     v_y.append(term_v_y)
+    for i in range(len(h_y)):
+        vector_v = np.array([v_x[i],v_y[i]])
     term_t=dt*n
     t.append(term_t)
-    term_v=sqrt(term_v_x**2+term_v_y**2)
+    term_v=np.linalg.norm(vector_v)
     v.append(term_v)
 
 print("Plot 1")
