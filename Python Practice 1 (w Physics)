@@ -1,0 +1,108 @@
+%matplotlib notebook
+%matplotlib inline
+import math as m
+import numpy as np
+import matplotlib.pyplot as plt
+from sympy import *
+
+#sample physics stuff for future reference
+#start with kinematics
+print("Units: kg, m, s")
+m=1
+g=9.8
+h=10
+dt=.01
+v_0y=0
+v_0x=0
+a_y=-g
+N=150
+
+t=[]
+h_x=[]
+h_y=[]
+v_x=[]
+v_y=[]
+v=[]
+for n in range(N):
+    term_v_y=v_0y+a_y*dt*n
+    term_v_x=v_0x
+    term_h_y=h+v_0y*dt*n+0.5*a_y*(dt*n)**2
+    term_h_x=term_v_x*dt*n
+    if term_h_y>0:
+        h_y.append(term_h_y)
+    else:
+        break
+    if term_h_x>0:
+        h_x.append(term_h_x)
+    else:
+        h_x.append(0)
+    v_x.append(term_v_x)
+    v_y.append(term_v_y)
+    term_t=dt*n
+    t.append(term_t)
+    term_v=sqrt(term_v_x**2+term_v_y**2)
+    v.append(term_v)
+
+print("Plot 1")
+plt.figure()
+plt.scatter(t,h_y)
+plt.xlabel('Time t (seconds)')
+plt.ylabel('Height h (meters)')
+plt.axhline(0,color='k')
+plt.axvline(0,color='k')
+plt.show()
+
+print("Plot 2")
+plt.figure()
+plt.scatter(t,v)
+plt.xlabel('Time t (seconds)')
+plt.ylabel('Velocity v (meters per second)')
+plt.axhline(0,color='k')
+plt.axvline(0,color='k')
+plt.show()
+
+#lets do energy now
+K = []
+U = []
+E = []
+
+for n in range(len(h_y)):
+    K_term = 0.5*m*(v[n])**2
+    U_term = m*g*(h_y[n])
+    K.append(K_term)
+    U.append(U_term)
+    E_term = K_term + U_term
+    E.append(E_term)
+
+print("Plot 3")
+plt.figure()
+plt.scatter(t,K)
+plt.xlabel('Time t (seconds)')
+plt.ylabel('Kinetic Energy K (joules)')
+plt.axhline(0,color='k')
+plt.axvline(0,color='k')
+plt.show()
+
+print("Plot 4")
+plt.figure()
+plt.scatter(t,U)
+plt.xlabel('Time t (seconds)')
+plt.ylabel('Potential Energy U (joules)')
+plt.axhline(0,color='k')
+plt.axvline(0,color='k')
+plt.show()
+
+print("Plot 5")
+plt.figure()
+plt.scatter(t,E)
+plt.xlabel('Time t (seconds)')
+plt.ylabel('Total Mechanical Energy in System E (joules)')
+plt.axhline(0,color='k')
+plt.axvline(0,color='k')
+plt.show()
+
+#ok so the problem earlier was that i was supposed to break the sim once h_y<=0 and that the energies should be range(len(h_y)) now everything works!
+
+#quick check for energy conservation
+print(E[0],E[1])
+#energy is conserved!
