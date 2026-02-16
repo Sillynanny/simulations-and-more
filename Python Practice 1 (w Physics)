@@ -18,6 +18,7 @@ a_x=0
 a_y=-g
 N=150
 
+F=m*np.array([a_x,a_y])
 t=[]
 h_x=[]
 h_y=[]
@@ -109,3 +110,18 @@ plt.show()
 #quick check for energy conservation
 print(E[0],E[1])
 #energy is conserved!
+
+#now its time for POWER!
+P=[]
+for i in range(len(h_y)):
+    term_P=F@np.array([v_x[i],v_y[i]])
+    P.append(term_P)
+
+print("Plot 6")
+plt.figure()
+plt.scatter(t,P)
+plt.xlabel('Time t (seconds)')
+plt.ylabel("Power P (watts)")
+plt.axhline(0,color='k')
+plt.axvline(0,color='k')
+plt.show()
