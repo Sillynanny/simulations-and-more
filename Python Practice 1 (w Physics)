@@ -1,3 +1,6 @@
+# The main goal here is to model simple, frictionless motion of a body of mass 1 kg in free-fall as it drops from a 10 m height. I'll try modeling the height of the body, its velocity, as well as its kinetic energy, potential energy, and total mechanical energy as time goes on. Hopefully, I'll analyze that the total energy is nearly constant. Additionally, I'll try plotting power vs time, which should be nonnegative.
+
+
 %matplotlib notebook
 %matplotlib inline
 import math as m
