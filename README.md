@@ -1,2 +1,2 @@
-# STEM-Learning
-Contains lab notes, engineering project info, and math notes
+# STEM
+Contains python stuff, math notes, and potentially lab notes
