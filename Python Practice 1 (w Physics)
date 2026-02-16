@@ -125,3 +125,16 @@ plt.ylabel("Power P (watts)")
 plt.axhline(0,color='k')
 plt.axvline(0,color='k')
 plt.show()
+
+
+#Analysis Q&A:
+#1. Does total energy stay constant? If not, why?
+# The total energy stayed constant because it was converted from potential energy to kinetic energy as it gained speed. Additionally, there were no nonconservative forces, so all energy was conserved.
+
+#2. What happens if you make dt larger?
+# If you make dt larger, the points become more spread out and the trend in the graph is harder to notice because we don't increase the time interval we are observing.
+
+#3. Does numerical error increase or decrease?
+# Assuming the question is referring back to Q2, the numerical error would increase if dt became larger.
+
+#Also I used the Velocity-Verlet Algorithm here (or some version of it), not the Euler method.
