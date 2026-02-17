@@ -15,6 +15,7 @@ v0=20
 N=700
 h=.01
 h0=50
+t=[]
 a_x=[]
 a_y=[]
 v_x=[]
@@ -44,8 +45,10 @@ for n in range(N):
     h_y.append(h_y_new)
     if h_y_new<0:
         break
-
-print("Plot 1: Position of Object (Vertical Position vs. Horizontal Position")
+for n in range(len(h_y)):
+    t_new=h*n
+    t.append(t_new)
+print("Plot 1: Position of Object: Vertical Position vs. Horizontal Position")
 plt.figure()
 plt.scatter(h_x,h_y)
 plt.xlabel("Horizontal Position")
@@ -53,3 +56,41 @@ plt.ylabel("Vertical Position")
 plt.axhline(y=0, color='k')
 plt.axvline(x=0, color='k')
 plt.show()
+
+print("Plot 2: Vertical Position vs. Time")
+plt.figure()
+plt.scatter(t,h_y)
+plt.xlabel("Time")
+plt.ylabel("Vertical Position")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 3: Horizontal Position vs. Time")
+plt.figure()
+plt.scatter(t,h_x)
+plt.xlabel("Time")
+plt.ylabel("Horizontal Position")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 4: Vertical Velocity vs. Time")
+plt.figure()
+plt.scatter(t,v_y)
+plt.xlabel("Time")
+plt.ylabel("Vertical Velocity")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 5: Horizontal Velocity vs. Time")
+plt.figure()
+plt.scatter(t,v_x)
+plt.xlabel("Time")
+plt.ylabel("Horizontal Velocity")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+#ok lets move on to energy now
