@@ -1,20 +1,18 @@
 # The goal for this simulation is to model the motion and velocity of an object with mass m under LINEAR air drag using simple Euler integration. Additionally, I'm aiming to model the conversion of energy within this system, and hopefully I'll analyze that the total mechanical energy in the system does NOT stay constant (it should decrease), as the nonconservative force of friction acts on the object. I will also model the power of the drag force, which should be negative if done right. I will model these physical concepts in this system by plotting them in simple time vs. concept graphs using matplotlib and numpy, and I will also answer some questions related to the sim, like what happens to the total mechanical energy and what happens to the velocity as time goes on.
 
-# Let's say the object has mass 1 kg, and it is thrown from a 50 m building at an initial velocity 20 m/s at an angle of 45 degrees. If we're using linear drag, then the force of drag will be F_d = -bv, where if we're using Stokes' flow, b will be 6*pi*n*r, where n is .00002 N*s/m^2 and r = .05 m. Thus, the constant b = .000019 N*s/m. As per usual, the gravity constant is g=9.8.
+# Let's say the object has mass 1 kg, and it is thrown from a 50 m building at an initial velocity 20 m/s at an angle of 45 degrees. If we're using linear drag, then the force of drag will be F_d = -bv, b=.5 N*s/m. As per usual, the gravity constant is g=9.8.
 %matplotlib notebook
 %matplotlib inline
 import numpy as np
 import matplotlib.pyplot as plt
-import sympy as sp
-from sympy import *
-#changes from previous sim: we are NOT importing math as they are useless for the sim
+#changes from previous sim: we are NOT importing math and sympy as they are useless for the sim
 print("Units: kg, m, s")
 m=1
 g=9.8
-b=.000019
-launch_angle=45*pi/180
+b=.5
+launch_angle=45*np.pi/180
 v0=20
-N=201
+N=700
 h=.01
 h0=50
 a_x=[]
@@ -23,42 +21,29 @@ v_x=[]
 v_y=[]
 h_x=[]
 h_y=[]
-v_x0=v0*cos(launch_angle)
-v_y0=v0*sin(launch_angle)
+v_x0=v0*np.cos(launch_angle)
+v_y0=v0*np.sin(launch_angle)
 h_x0=0
 h_y0=h0
-v_x.insert(0,v_x0)
-v_y.insert(0,v_y0)
-h_x.insert(0,h_x0)
-h_y.insert(0,h_y0)
-print(v_x)
-print(v_y)
-print(h_x)
-print(h_y)
-print(list(range(N)))
+v_x.append(v_x0)
+v_y.append(v_y0)
+h_x.append(h_x0)
+h_y.append(h_y0)
 for n in range(N):
     a_x0=(-b/m)*v_x[n]
     a_y0=-g+(-b/m)*v_y[n]
-    a_x.insert(0,a_x0)
-    a_y.insert(0,a_y0)
-    print(a_y)
-    print(a_x)
-    v_x[n+1]=v_x[n]+h*a_x[n]
-    v_y[n+1]=v_y[n]+h*a_y[n]
-    h_x[n+1]=h_x[n]+h*v_x[n]
-    h_y[n+1]=h_y[n]+h*v_y[n]
-    a_x.append(a_x[n])
-    a_y.append(a_y[n])
-    v_x.append(v_x[n])
-    v_y.append(v_y[n])
-    if h_x[n]<0:
+    v_x_new=v_x[n]+h*a_x0
+    v_y_new=v_y[n]+h*a_y0
+    h_x_new=h_x[n]+h*v_x_new
+    h_y_new=h_y[n]+h*v_y_new
+    a_x.append(a_x0)
+    a_y.append(a_y0)
+    v_x.append(v_x_new)
+    v_y.append(v_y_new)
+    h_x.append(h_x_new)
+    h_y.append(h_y_new)
+    if h_y_new<0:
         break
-    else:
-        h_x.append(h_x[n])
-    if h_y[n]<0:
-        break
-    else:
-        h_y.append(h_y[n])
 
 print("Plot 1: Position of Object (Vertical Position vs. Horizontal Position")
 plt.figure()
