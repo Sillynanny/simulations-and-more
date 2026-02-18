@@ -150,3 +150,34 @@ plt.ylabel("Power of Drag")
 plt.axhline(y=0, color='k')
 plt.axvline(x=0, color='k')
 plt.show()
+
+
+# Observations:
+# - The position does NOT follow a parabolic trajectory, which is as expected
+# - The horizontal position levels off asymptotically to around 20sqrt(2) as t goes to positive infinity, which is expected
+# - The vertical velocity levels off asymptotically to around -19.6 as t goes to positive infinity, which is expected
+# - The horizontal velocity levels off asymptotically to around 0 as t goes to positive infinity, which is expected
+# - Kinetic energy decreases, reaches trough, and increases: Expected because energy is converted to potential energy, then back to kinetic energy
+# - Potential energy increases, reaches peak, then decreases: Expected as kinetic energy is converted to potential energy, then vice versa after max height is reached
+# - Total mechanical energy DOES NOT stay constant: Makes sense as due to drag, some energy is converted to thermal energy
+# - Total work done by the nonconservative force (drag) is around -532 J, which is the negative of total mechanical energy lost -> Why? (Good question)
+# - Power of drag is negative -> Why?
+# - Power looks like kinetic energy but flipped and scaled -> Why? (Good question)
+
+# Questions (my own):
+# 1. How does drag affect the horizontal and vertical position of the object?
+# 2. How does drag affect the kinetic, potential, and total mechanical energy of the system?
+# 3. Why is the power of drag strictly negative?
+# 4. Why is the total mechanical energy lost equal to the negative of the work done by drag?
+# 5. Why does the power graph look like the kinetic energy graph but flipped and scaled?
+# 6. What would happen if we decreased b? Increased b?
+# 7. Would increasing h do anything? If it does, why?
+
+# Answers:
+# 1. Drag affects the horizontal and vertical position by decaying the velocity, which in turn decays the horizontal and vertical position. Thinking physically, there is a resistive force, which should obviously hinder motion.
+# 2. Drag affects the potential, kinetic, and total mechanical energy by decreasing all of them. This is due to drag converting some energy of the object into thermal energy. Since there is less energy in the system, the kinetic, potential, and total mechanical energy must decrease.
+# 3. The power of drag is strictly negative because the force of drag points in the opposite direction of the velocity, which means they make an angle of 180 degrees. Since power is defined as the dot product of the force and the velocity, and the dot product is also defined as the product of the magnitudes and the cosine of the angle, the power must be negative as cos(180 degrees) is -1, and the magnitudes are strictly positive.
+# 4. We know that E=K+U, as is defined. Now, we know that there are two forces: drag and gravity. Thus, using the work-energy theorem, W_grav + W_drag = delta K, which means W_drag = delta K + delta U = .5mv_f^2 - .5mv_i^2 + mgh_f - mgh_i = E_f - E_i. We define the total mechanical energy lost as E_i - E_f, so W_drag equals the negative of the loss in mechanical energy.
+# 5. The power graph looks like the kinetic energy graph but scaled and flipped because we define P_drag=F_drag.v=-bv.v=-bv^2, which is proportional to the negative kinetic energy. Thus, the graph looks like the kinetic energy graph but scaled and flipped.
+# 6. If we increased b, we would expect the positions and velocities to decay far faster, and more energy would be lost due to heat. If we decreased b, the positions and velocities would decay slower and look closer and closer to the parabolic, frictionless motion that has b=0.
+# 7. Increasing h would make the error in our approximations of our velocities, positions, energies, etc. worse. This is because we use the Euler method, and it is designed so that for small h, the approximation is better due to h being the "dx" of the tangent line that is used in the Euler method.
