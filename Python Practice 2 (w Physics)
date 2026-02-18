@@ -22,6 +22,7 @@ v_x=[]
 v_y=[]
 h_x=[]
 h_y=[]
+v=[]
 v_x0=v0*np.cos(launch_angle)
 v_y0=v0*np.sin(launch_angle)
 h_x0=0
@@ -94,3 +95,42 @@ plt.axvline(x=0, color='k')
 plt.show()
 
 #ok lets move on to energy now
+K=[]
+U=[]
+E=[]
+for i in range(len(h_y)):
+    K_new=.5*m*(v_x[i]**2+v_y[i]**2)
+    K.append(K_new)
+    U_new=m*g*h_y[i]
+    U.append(U_new)
+    E_new=K_new+U_new
+    E.append(E_new)
+print("Plot 6: Kinetic Energy vs. Time")
+plt.figure()
+plt.scatter(t,K)
+plt.xlabel("Time")
+plt.ylabel("Kinetic Energy")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 7: Potential Energy vs. Time")
+plt.figure()
+plt.scatter(t,U)
+plt.xlabel("Time")
+plt.ylabel("Potential Energy")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 8: Total Mechanical Energy vs. Time")
+plt.figure()
+plt.scatter(t,E)
+plt.xlabel("Time")
+plt.ylabel("Total Mechanical Energy")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("The total mechanical energy lost is:")
+print(E[0]-E[-1])
