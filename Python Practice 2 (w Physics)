@@ -181,3 +181,5 @@ plt.show()
 # 5. The power graph looks like the kinetic energy graph but scaled and flipped because we define P_drag=F_drag.v=-bv.v=-bv^2, which is proportional to the negative kinetic energy. Thus, the graph looks like the kinetic energy graph but scaled and flipped.
 # 6. If we increased b, we would expect the positions and velocities to decay far faster, and more energy would be lost due to heat. If we decreased b, the positions and velocities would decay slower and look closer and closer to the parabolic, frictionless motion that has b=0.
 # 7. Increasing h would make the error in our approximations of our velocities, positions, energies, etc. worse. This is because we use the Euler method, and it is designed so that for small h, the approximation is better due to h being the "dx" of the tangent line that is used in the Euler method.
+
+Project: DONE as of 2/18/26 (improvements/refinements from GPT in commit description)
