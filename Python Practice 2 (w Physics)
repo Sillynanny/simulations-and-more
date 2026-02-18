@@ -22,7 +22,6 @@ v_x=[]
 v_y=[]
 h_x=[]
 h_y=[]
-v=[]
 v_x0=v0*np.cos(launch_angle)
 v_y0=v0*np.sin(launch_angle)
 h_x0=0
@@ -134,3 +133,20 @@ plt.show()
 
 print("The total mechanical energy lost is:")
 print(E[0]-E[-1])
+print("The work done by nonconservative forces (drag) is:")
+print(K[-1]-K[0]+U[-1]-U[0])
+
+#ok now let's quickly do the power of drag
+P_drag=[]
+for i in range(len(v_y)):
+    P_drag_new=-b*(v_x[i]**2+v_y[i]**2)
+    P_drag.append(P_drag_new)
+
+print("Plot 9: Drag Power vs. Time")
+plt.figure()
+plt.scatter(t,P_drag)
+plt.xlabel("Time")
+plt.ylabel("Power of Drag")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
