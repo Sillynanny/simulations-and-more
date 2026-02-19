@@ -1,0 +1,101 @@
+# The goal for this simulation is to successfully simulate the motion of a projectile with mass m under quadratic drag. Additionally, I hope to compare the effects between linear and quadratic drag by using the same mass, height, and launch angle + speed as my sim with linear drag. I hope to notice that the terminal velocities are much smaller and that the positions are much smaller. Additionally, I should observe that the total mechanical energy is even less than with linear drag. As per usual, kinetic, potential, and total mechanical energy will be modeled and plotted as well as the power of drag. The hard part here is that I won't be able to check any of the results on paper, as solving 2D motion with quadratic drag is only really possible with a computer. At the end of the sim, I'll make observations, make my own questions and answer them, and I will also ask GPT for questions of its own for me to answer. I will also examine the effects of changing some stuff around, like launch angle, launch speed, drag constant, time-step, etc.
+
+# We'll use the same constants as last sim: mass m=1 kg, initial height h0=50 meters, initial velocity 20 m/s at an angle of 45 degrees above the horizontal, and we'll use the same drag constant b=.5, but the force this time will be F_drag=-b*v*|v|. The reason why we have a |v| instead of regular v is because we need to make sure that the force still opposes velocity, but with magnitude proportional to |v|^2, so we take F_drag_linear = -b*v and add an extra factor of |v|.
+
+%matplotlib notebook
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+#no changes yet we need everything here
+print("Units: kg, m, s")
+m=1
+g=9.8
+b=.5
+launch_angle=45*np.pi/180
+v0=20
+N=20000
+#quick change: made N WAY BIGGER the plot didn't even reach the ground
+h=.001
+#immediate observation: made timestep smaller
+h0=50
+t=[]
+a_x=[]
+a_y=[]
+v_x=[]
+v_y=[]
+h_x=[]
+h_y=[]
+v_x0=v0*np.cos(launch_angle)
+v_y0=v0*np.sin(launch_angle)
+h_x0=0
+h_y0=h0
+v_x.append(v_x0)
+v_y.append(v_y0)
+h_x.append(h_x0)
+h_y.append(h_y0)
+#ok the truth is that im really inexperienced with quadratic drag so I'll need to test around with the appending of terms
+for n in range(N):
+    a_x0=-(b/m)*v_x[n]*np.sqrt(v_x[n]**2+v_y[n]**2)
+    a_y0=-g-(b/m)*v_y[n]*np.sqrt(v_x[n]**2+v_y[n]**2)
+    v_x_new=v_x[n]+h*a_x0
+    v_y_new=v_y[n]+h*a_y0
+    h_x_new=h_x[n]+h*v_x_new
+    h_y_new=h_y[n]+h*v_y_new
+    a_x.append(a_x0)
+    a_y.append(a_y0)
+    v_x.append(v_x_new)
+    v_y.append(v_y_new)
+    h_x.append(h_x_new)
+    h_y.append(h_y_new)
+    if h_y_new<0:
+        break
+#ok gpt said last sim i should append time in the main loop above but it wont work if i do that so like its not going there
+for n in range(len(h_y)):
+    t_new=h*n
+    t.append(t_new)
+print("Plot 1: Position of Object: Vertical Position vs. Horizontal Position")
+plt.figure()
+plt.scatter(h_x,h_y)
+plt.xlabel("Horizontal Position")
+plt.ylabel("Vertical Position")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 2: Vertical Position vs. Time")
+plt.figure()
+plt.scatter(t,h_y)
+plt.xlabel("Time")
+plt.ylabel("Vertical Position")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 3: Horizontal Position vs. Time")
+plt.figure()
+plt.scatter(t,h_x)
+plt.xlabel("Time")
+plt.ylabel("Horizontal Position")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 4: Vertical Velocity vs. Time")
+plt.figure()
+plt.scatter(t,v_y)
+plt.xlabel("Time")
+plt.ylabel("Vertical Velocity")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 5: Horizontal Velocity vs. Time")
+plt.figure()
+plt.scatter(t,v_x)
+plt.xlabel("Time")
+plt.ylabel("Horizontal Velocity")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+#ik i should be using continuous motion but plot looks so much uglier im js gonna do scatter
