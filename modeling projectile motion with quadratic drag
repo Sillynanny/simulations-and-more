@@ -8,12 +8,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 #no changes yet we need everything here
 print("Units: kg, m, s")
+theta=45
 m=1
 g=9.8
 b=.5
-launch_angle=45*np.pi/180
+launch_angle=theta*np.pi/180
 v0=20
-N=20000
+N=25000
 #quick change: made N WAY BIGGER the plot didn't even reach the ground
 h=.001
 #immediate observation: made timestep smaller
@@ -98,4 +99,97 @@ plt.axhline(y=0, color='k')
 plt.axvline(x=0, color='k')
 plt.show()
 
+K=[]
+U=[]
+E=[]
+
+for n in range(len(h_y)):
+    K_term=.5*m*(v_x[n]**2+v_y[n]**2)
+    K.append(K_term)
+    U_term=m*g*h_y[n]
+    U.append(U_term)
+    E_term=K_term+U_term
+    E.append(E_term)
+
+print("Plot 6: Kinetic Energy vs. Time")
+plt.figure()
+plt.scatter(t,K)
+plt.xlabel("Time")
+plt.ylabel("Kinetic Energy")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 7: Potential Energy vs. Time")
+plt.figure()
+plt.scatter(t,U)
+plt.xlabel("Time")
+plt.ylabel("Potential Energy")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("Plot 8: Total Mechanical Energy vs. Time")
+plt.figure()
+plt.scatter(t,E)
+plt.xlabel("Time")
+plt.ylabel("Total Mechanical Energy")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
+
+print("The total mechanical energy lost is:")
+print(E[0]-E[-1])
+print("The work done by nonconservative forces (drag) is:")
+print(K[-1]-K[0]+U[-1]-U[0])
+#pretty simple all we had to do was copy everything over from linear drag
+
+#ok now its time for power!
+P_drag=[]
+for n in range(len(h_y)):
+    P_drag_term=-b*np.sqrt(v_x[n]**2+v_y[n]**2)*(v_x[n]**2+v_y[n]**2)
+    P_drag.append(P_drag_term)
+
+print("Plot 9: Drag Power vs. Time")
+plt.figure()
+plt.scatter(t,P_drag)
+plt.xlabel("Time")
+plt.ylabel("Power of Drag")
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+plt.show()
 #ik i should be using continuous motion but plot looks so much uglier im js gonna do scatter
+
+#Initial Observations:
+# - VERY noticeable differences between linear and quadratic drag
+# - The height of the object very suddenly drops to 0 m
+# - The vertical position decreases quite linearly (very odd)
+# - The horizontal velocity levels off, as is the case with linear drag, but much faster this time (and to a lower value)
+# - The velocities change far more rapidly
+# - A LOT more energy is lost due to heat (around 97% is lost due to heat, a whopping 21% increase in loss from linear drag)
+# - As per usual, the work done by drag is the negative of the total mechanical energy lost
+# - The power of drag changes VERY fast and starts very high (the absolute value of it, that is)
+# - The power of drag is spaced out for t close to 0 sec, which means that we need a bigger N value or something is up with Euler integration
+
+# Questions (my own):
+# 1. Why do all these values suddenly change very fast? Why does the graph of vertical position vs. time look so linear?
+# 2. Why is so much energy lost due to heat?
+# 3. Why do we use quadratic drag to model realistic projectile motion?
+
+# Answers:
+# 1. All the values change very fast because, since we're dealing with quadratic drag, low values of velocity are small, but as the velocities increase, the force of drag blows up. This causes the positions to very quickly change. When looking back at the vertical position graph from the linear drag sim, we can see that it begins to deform away from the parabolic shape of motion in a vacuum, and more towards a line. Thus, I infer that drag causes the height graph to deform away from the parabolic shape and towards a linear shape (I don't really have a better explanation).
+# 2. So much energy is lost due to heat because the force of drag is much stronger (for greater velocities, that is), and if the force is stronger, the drag does more work, meaning more energy is lost.
+# 3. We use quadratic drag to model realistic projectile motion because in the real world, the force of drag from the air is usually always proportional to v^2.
+
+#the above observations, Qs, and As were made with the following data: mass 1 kg, initial height 50 m, launch angle 45 degrees, launch speed 20 m/s, drag constant b=.5, and timestep h=.001.
+#now let's shift some stuff around (one at a time though)
+#expectations: if the initial velocity is smaller, I expect a path closer to a parabola as quadratic drag deforms more with higher velocities - if its bigger, then the path will deform far quicker; if we make the mass smaller, then the power of drag should NOT be affected - everything else, like the path, velocities, and energies SHOULD be affected; if we increase the drag constant, the effects of drag should be noticed earlier, and more energy will be lost - it is the opposite for smaller drag constants; bigger timestep means less accuracy, while smaller timestep means more accuracy (remember that Euler integration has an error PROPORTIONAL to h, the timestep)
+
+#Observations:
+# 1. My expectations were very wrong - the power of drag was, in fact, affected. Additionally, if we used bigger masses, the effects of quadratic drag were smaller, and the graphs looked more like linear drag (for example, the position was more parabolic). It is the opposite for smaller masses - smaller masses results in the effects of drag being FAR more noticeable. My assumption for the reason behind this is that in the equations for acceleration, we have the quotient b/m, but I don't see why a smaller mass (which I assume means larger acceleration) means more effects from drag. Maybe GPT can answer this? Tested for masses 5 kg and .2 kg.
+# 2. My expectations were quite poorly worded, but what I expected mentally did show up (I know, I know, great excuse) - smaller drag constant means the path looks more like a parabola and everything isn't as damped, and some mechanical energy is saved (~40 J for b=.1). For bigger drag constants, the positions and velocities are damped a lot more mechanical energy is lost (~5 J for b=1). Tested for drag constants .1 and 1.
+# 3. I forgot to state my expectations for shifting the angle, but it makes sense that a smaller angle means a wider horizontal range (cosine of the angle is larger). Additionally, since energy does NOT depend on the path taken, the energies and mechanical energy lost stayed the same (makes sense). Additionally, a larger angle means s shorter range but a greater max height. Tested for 30 degrees and 60 degrees. Never mind, upon further analysis, the total energy lost DOES change by a few hundredths. A larger angle means more energy lost, while a smaller angle results in less energy lost (only by a few hundredths of a joule).
+# 4. For a smaller velocity, the path does NOT look more like a parabola. The velocities are still highly damped (probably even more now). However, the amount of mechanical energy lost is FAR more, as it's 500 J originally vs. ~492 J lost. I don't really know why it's more energy lost, so I'll see what GPT says. For a bigger velocity, there is a larger max height reached (makes sense), and there is a LOT more mechanical energy lost as well. There was 1300 J originally and ~1280 J lost. Tested for 5 m/s and 40 m/s.
+# 5. As is expected, there is a bigger space between points for a bigger timestep h, which means there is a bigger error (as is expected). For smaller timesteps, as we expected, the space between points is smaller and there is a smaller error. It is also important to note that bigger h means a bigger error in the mechanical energy lost. Tested for h=.05 and h=.0001.
+
+# That wraps up the part only involving me. From here, I'll have GPT answer any questions I have and grade this, and give me feedback. Feedback will be posted in git commits.
