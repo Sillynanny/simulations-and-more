@@ -193,3 +193,10 @@ plt.show()
 # 5. As is expected, there is a bigger space between points for a bigger timestep h, which means there is a bigger error (as is expected). For smaller timesteps, as we expected, the space between points is smaller and there is a smaller error. It is also important to note that bigger h means a bigger error in the mechanical energy lost. Tested for h=.05 and h=.0001.
 
 # That wraps up the part only involving me. From here, I'll have GPT answer any questions I have and grade this, and give me feedback. Feedback will be posted in git commits.
+
+# Post GPT comments: Ok so, GPT gave me a 95% on this, which is pretty cool cuz I went in thinking I would get an 85%. To answer some of the questions I had:
+# 1. The values change faste because the magnitude of the force of drag is proportional to v^2, which means high velocities means values change VERY fast
+# 2. Since we're working with quadratic drag, the vertical velocity approaches the terminal velocity a lot quicker, which means that vertical position will begin to look linear a lot faster.
+# 3. I was missing a key thing: F_drag = ma_drag -> a_drag = F_drag/m. For higher masses, the acceleration is lower which means drag has less of an effect. For lower masses, it is the opposite.
+# 4. Power scales fast (faster than the positions and velocities) because it scales with v^3, meaning it changes WAY faster.
+# 5. My errors were quite small, like still using scatter instead of plot and appending time within its own loop.
