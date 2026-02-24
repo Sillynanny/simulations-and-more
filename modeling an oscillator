@@ -1,0 +1,96 @@
+#The goal for this simulation is to model an oscillator system with a spring of mass m, drag constant b, and spring constant k. I'll model the motion of the spring using a position vs. time plot, but I will also plot the velocity vs. time and the energies (kinetic, potential, total) vs. time. Additionally, I hope to analyze the effects of changing some things, like the drag constant, integration method (Euler vs. RK4), initial position, and initial velocity.
+#For the first run, we'll use mass m=1 kg, drag constant b=0 N*s/m, spring constant k=4 N/m, initial position x0=1 m, and initial velocity v0=0 m/s. In the first run, I'll compare Euler vs. RK4 here because I do NOT want to have to redo the comparison between each run. By the way, there will be multiple runs for the different drag constants (the other ones will be b=1 N*s/m, b=4 N*s/m, and b=8 N*s/m) and for the different initial positions and velocity.
+
+#Run 1
+
+%matplotlib notebook
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+print("Units: kg, m, s")
+
+m=1
+b=0
+k=4
+x0=1
+v0=0
+h=.001
+#change: position graph isn't right so let's try smaller h (.01->.001)
+N=500000
+#change: gotta scale up N along with h (2500->25000)
+#change 2: making N twice as big to make any error noticeable (remember: it should look like a cosine graph and a cosine graph only)
+#Observation: Clearly an error with RK4 (max position begins to increase as time goes on)
+#fixed errors in RK4
+#Euler and RK4 don't have much difference between each other
+h=.01
+N=5000
+#still not much of a difference
+h=.05
+N=1000
+#oddly enough not much of a difference
+t=[]
+for n in range(N):
+    t_new=h*n
+    t.append(t_new)
+
+#RK4:
+
+x=np.zeros(N)
+v=np.zeros(N)
+x[0]=x0
+v[0]=v0
+#ok so my current RK4 is actually LESS accurate than my Euler which makes no sense, so something is wrong with the code below:
+#ok turns out I'm DUMB! nah but like apparently I should be viewing this as a vector system, so y=<x,v> -> y'=<x',v'>=<v,[equation for acceleration]> and blah blah RK4:
+#error fixed! (with a LOT of help from GPT)
+for n in range(N-1):
+    k1_x=v[n]
+    k1_v=(-(b/m)*v[n])-((k/m)*x[n])
+    k2_x=v[n]+.5*h*k1_v
+    k2_v=-(b/m)*(v[n]+.5*h*k1_v)-(k/m)*(x[n]+.5*h*k1_x)
+    k3_x=v[n]+.5*h*k2_v
+    k3_v=-(b/m)*(v[n]+.5*h*k2_v)-(k/m)*(x[n]+.5*h*k2_x)
+    k4_x=v[n]+h*k3_v
+    k4_v=-(b/m)*(v[n]+h*k3_v)-(k/m)*(x[n]+h*k3_x)
+    x[n+1]=x[n]+(h/6)*(k1_x+2*k2_x+2*k3_x+k4_x)
+    v[n+1]=v[n]+(h/6)*(k1_v+2*k2_v+2*k3_v+k4_v)
+
+print("Plot 1: Position vs. Time")
+plt.figure()
+plt.plot(t,x)
+#change: I'm switching to plot to make it a continuous line instead of points squished together
+plt.xlabel("Time")
+plt.ylabel("Position")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
+
+print("Plot 2: Velocity vs. Time")
+plt.figure()
+plt.plot(t,v)
+plt.xlabel("Time")
+plt.ylabel("Velocity")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
+
+#Euler:
+
+x=[]
+v=[]
+x.append(x0)
+v.append(v0)
+for n in range(N-1):
+    a_0=-(b/m)*v[n]-(k/m)*x[n]
+    v_new=v[n]+h*a_0
+    x_new=x[n]+h*v_new
+    v.append(v_new)
+    x.append(x_new)
+
+print("Plot 3: Position vs. Time")
+plt.figure()
+plt.plot(t,x)
+plt.xlabel("Time")
+plt.ylabel("Position")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
