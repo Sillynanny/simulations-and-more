@@ -38,6 +38,9 @@ N=1000
 #b=1: error in x[100] is -0.007311554443062959
 #b=4: error in x[100] is -0.0005145159004975118
 #b=8: error in x[100] is -0.0007318195635803992
+h=.1
+N=500
+#gpt said I should try ts so let's see how it goes
 t=[]
 for n in range(N):
     t_new=h*n
@@ -50,7 +53,7 @@ v=np.zeros(N)
 x[0]=x0
 v[0]=v0
 #ok so my current RK4 is actually LESS accurate than my Euler which makes no sense, so something is wrong with the code below:
-#ok turns out I'm DUMB! nah but like apparently I should be viewing this as a vector system, so y=<x,v> -> y'=<x',v'>=<v,[equation for acceleration]> and blah blah RK4:
+#ok turns out I'm DUMB! no but like apparently I should be viewing this as a vector system, so y=<x,v> -> y'=<x',v'>=<v,[equation for acceleration]> and blah blah RK4:
 #error fixed! (with a LOT of help from GPT)
 for n in range(N-1):
     k1_x=v[n]
@@ -64,7 +67,7 @@ for n in range(N-1):
     x[n+1]=x[n]+(h/6)*(k1_x+2*k2_x+2*k3_x+k4_x)
     v[n+1]=v[n]+(h/6)*(k1_v+2*k2_v+2*k3_v+k4_v)
 a=x[100]
-print("Plot 1: Position vs. Time")
+print("Plot 1: Position vs. Time (RK4)")
 plt.figure()
 plt.plot(t,x)
 #change: I'm switching to plot to make it a continuous line instead of points squished together
@@ -85,18 +88,18 @@ plt.show()
 
 #Euler:
 
-x=[]
-v=[]
-x.append(x0)
-v.append(v0)
+x_e=[]
+v_e=[]
+x_e.append(x0)
+v_e.append(v0)
 for n in range(N-1):
     a_0=-(b/m)*v[n]-(k/m)*x[n]
-    v_new=v[n]+h*a_0
-    x_new=x[n]+h*v_new
-    v.append(v_new)
-    x.append(x_new)
-b=x[100]
-print("Plot 3: Position vs. Time")
+    v_e_new=v[n]+h*a_0
+    x_e_new=x[n]+h*v_e_new
+    v_e.append(v_e_new)
+    x_e.append(x_e_new)
+b=x_e[100]
+print("Plot 3: Position vs. Time (Euler)")
 plt.figure()
 plt.plot(t,x)
 plt.xlabel("Time")
@@ -106,3 +109,85 @@ plt.axvline(x=0,color='k')
 plt.show()
 print(a-b)
 print(h+N)
+
+#energy time!
+K=[]
+U=[]
+E=[]
+for n in range(N):
+    K_term=.5*m*(v[n]**2)
+    U_term=.5*k*(x[n]**2)
+    E_term=K_term+U_term
+    K.append(K_term)
+    U.append(U_term)
+    E.append(E_term)
+
+print("Plot 4: Kinetic Energy vs. Time (RK4)")
+plt.figure()
+plt.plot(t,K)
+plt.xlabel("Time")
+plt.ylabel("Kinetic Energy")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
+
+print("Plot 5: Potential Energy vs. Time (RK4)")
+plt.figure()
+plt.plot(t,U)
+plt.xlabel("Time")
+plt.ylabel("Potential Energy")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
+
+print("Plot 6: Total Mechanical Energy vs. Time (RK4)")
+plt.figure()
+plt.plot(t,E)
+plt.xlabel("Time")
+plt.ylabel("Total Mechanical Energy Energy")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
+
+K_e=[]
+U_e=[]
+E_e=[]
+for n in range(N):
+    K_e_term=.5*m*(v_e[n]**2)
+    U_e_term=.5*k*(x_e[n]**2)
+    E_e_term=K_e_term+U_e_term
+    K_e.append(K_e_term)
+    U_e.append(U_e_term)
+    E_e.append(E_e_term)
+
+print("Plot 7: Kinetic Energy vs. Time (Euler)")
+plt.figure()
+plt.plot(t,K_e)
+plt.xlabel("Time")
+plt.ylabel("Kinetic Energy")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
+
+print("Plot 8: Potential Energy vs. Time (Euler)")
+plt.figure()
+plt.plot(t,U_e)
+plt.xlabel("Time")
+plt.ylabel("Potential Energy")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
+
+print("Plot 9: Total Mechanical Energy vs. Time (Euler)")
+plt.figure()
+plt.plot(t,E_e)
+plt.xlabel("Time")
+plt.ylabel("Total Mechanical Energy Energy")
+plt.axhline(y=0,color='k')
+plt.axvline(x=0,color='k')
+plt.show()
+
+#Energy Observations:
+# - Kinetic and potential energies have very little graphical error
+# - RK4 total mechanical energy for b=0 stays constant at 2 J (expected), while Euler oscillates with midline 2 J and an amplitude of what looks to be ~ .1 J
+# - Sample numerical error: The errors taken at the 100th term for kinetic, potential, and total mechanical energy respectively is
