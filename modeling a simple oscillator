@@ -12,8 +12,8 @@ print("Units: kg, m, s")
 m=1
 b=float(input("b value:"))
 k=4
-x0=1
-v0=0
+x0=float(input("Initial Position: "))
+v0=float(input("Initial Velocity: "))
 h=.001
 #change: position graph isn't right so let's try smaller h (.01->.001)
 N=500000
@@ -187,7 +187,33 @@ plt.axhline(y=0,color='k')
 plt.axvline(x=0,color='k')
 plt.show()
 
+print(K[100]-K_e[100])
+print(U[100]-U_e[100])
+print(E[100]-U_e[100])
+
 #Energy Observations:
 # - Kinetic and potential energies have very little graphical error
-# - RK4 total mechanical energy for b=0 stays constant at 2 J (expected), while Euler oscillates with midline 2 J and an amplitude of what looks to be ~ .1 J
-# - Sample numerical error: The errors taken at the 100th term for kinetic, potential, and total mechanical energy respectively is
+# - RK4 total mechanical energy for b=0 stays constant at 2 J (expected), while Euler oscillates with midline 2 J and an amplitude of what looks to be ~ .1 J (b=0)
+# - Sample numerical error (b=0): The errors taken at the 100th term for kinetic, potential, and total mechanical energy respectively are -0.0626141972872869 J, 0.020504038739448227 J, and 1.6869028864283575 J
+# - Sample numerical error (b=1): The errors taken at the 100th term for kinetic, potential, and total mechanical energy respectively are -1.5591132711558824e-06 J, 3.469181528177964e-06 J, and 2.6996045585468245e-05 J
+# - Sample numerical error (b=4): The errors taken at the 100th term for kinetic, potential, and total mechanical energy respectively are 1.375630779510853e-16 J, -1.7583989758774552e-16 J, and 3.2244325769040126e-15 J
+# - Sample numerical error (b=8): The errors taken at the 100th term for kinetic, potential, and total mechanical energy respectively are 1.0977109264648937e-08 J, -1.5861731109226588e-07 J, and 3.53196466164654e-06 J
+# - Important to note that these sample numerical errors aren't always trustworthy, as, for example, the total mechanical energies for earlier times have far larger differences. I could be wrong and maybe all the energies have a larger error earlier on.
+
+#Finally, let's change around the initial positions and velocities (Run for b=1)
+# Observations:
+# - x0=0, v0=0: Nothing plotted -> No energy and no movement (expected)
+# - x0=1, v0=1: Error between energies are small, but no noticeable abnormalities or phenomenons; Block starts at 1 m and its position oscillates between the equilibrium point, asymptotically approaching it
+# - x0=0, v0=1: Error between energies are small, but no noticeable abnormalities or phenomenons; Block starts at 0 m and its position oscillates between equilibrium, asymptotically approaching it
+# - x0=1, v0=1: Error between energies are small, but no noticeable abnormalities or phenomenons; Block starts at 1 m and its position oscillates between equilibrium, asymptotically approaching it
+
+#Overall Results and Conclusions
+
+# - I was successfully able to model the position, velocity, kinetic energy, potential energy, and total mechanical energy of an oscillator system with dampening constants ranging from b=0, 1, 4, and 8. Additionally, I was able to model the error in Euler and RK4 integration techniques, especially with the energies, and was also able to model the motion of this system using different starting positions and velocities. While unplanned, I also tested out different time ranges, h-values, and N-values.
+
+# - Main conclusions:
+# 1. An object with oscillate in a sinusoidal manner when there is no dampening constant, while the motion will be more and more dampened as the dampening constant gets larger. This can be supported physically and mathematically: a higher dampening constant will result in a higher resistive force, which will obviously hinder net force and motion more. Thinking mathematically, a higher b-value (dampening constant) will mean the exponential decay part of the equation for motion will have a larger exponent (<<0), so it will dampen the sinusoidal part of the equation.
+# 2. For a system like an oscillator, the difference in positions, velocities, and kinetic and potential energies was small between RK4 and Euler, but for some reason, the total mechanical energy has large differences. For example, for b=0, x0=1, and v0=0 the RK4 energy was constant at 2 J, while the Euler energy oscillated around 2 J by a relatively large (compared to other errors) margin of error. I can't explain this with my level of knowledge.
+# 3. RK4 is far more reliable for more complex simulations, like oscillators instead of projectile motion, than Euler is. This is evident from the fact that there are pretty noticeable errors in the energies, and having larger errors, especially in energies in far more complex sims, can be detrimental when it comes to stable and unstable equilibriums.
+
+# Done 3/3/2026
