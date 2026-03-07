@@ -1,0 +1,13 @@
+# The goal for this sim is easy: model an oscillator, a block attached to a spring, with dry friction and viscous dampening on the block. This means that we'll no longer be able to verify data with analytical solutions, but instead with numerical observations and previous physics knowledge. I hope to plot the position vs. time, phase space (position vs. velocity), velocity vs. time, kinetic vs. time, potential vs. time, and total mechanical energy of the system vs. time. However, instead of doing one state only, we'll do three different states, and within those states, critical values (like mu or the b-value). The three different states will be with pure viscous dampening, pure dry friction, and then both. After ALL the code is typed out, I will put all my analyses and observations below so the code isn't cluttered.
+# If we use a pen and paper and a FBD, we get that the differential equation mx'' + bx' + kx + mu*N*sign(x') = 0. We'll use the following values: mass is 2 kg and the spring constant will be 6 N/m. Therefore, F_n = m*g = 2*9.8 = 19.6 N. The different values of mu will be .1, .5, 1, 2, and 5. The different values of b will be 0 N*s/m, 2 N*s/m, 4*sqrt(3) N*s/m, and 8 N*s/m.
+# Obviously, we'll be using RK4. We can keep the h value something like h=.001, and let's make the time range
+
+# Round 1: Pure Viscous Dampening (mu=0)
+
+%matplotlib notebook
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+print("Basic Units: kg, m, s, N")
+m=2
+
